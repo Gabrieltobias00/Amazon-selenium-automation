@@ -1,0 +1,47 @@
+package steps;
+
+import io.cucumber.java.en.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.*;
+
+import java.time.Duration;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class AmazonSteps {
+    WebDriver driver;
+    WebDriverWait wait;
+
+    @Given("que o usuário está na página inicial da Amazon Brasil")
+    public void abrirPaginaInicial() {
+        driver = new SafariDriver();
+        driver.manage().window().maximize();
+        driver.get("https://www.amazon.com.br/");
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    @When("ele digita {string} na barra de pesquisa")
+    public void digitaNaBarraDePesquisa(String termo) {
+        WebElement barra = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("twotabsearchtextbox")));
+        barra.sendKeys(termo);
+    }
+
+    @Then("o sistema deve exibir uma lista de sugestões relacionadas ao termo {string}")
+    public void verificaSugestoes(String termo) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".s-suggestion")));
+        List<WebElement> sugestoes = driver.findElements(By.cssSelector(".s-suggestion"));
+        assertTrue("Nenhuma sugestão encontrada", sugestoes.size() > 0);
+        boolean sugestaoRelativa = sugestoes.stream().anyMatch(e -> e.getText().toLowerCase().contains(termo));
+        assertTrue("Nenhuma sugestão relevante", sugestaoRelativa);
+        driver.quit();
+    }
+
+    @Then("o sistema não deve exibir sugestões de pesquisa")
+    public void verificaSemSugestoes() {
+        List<WebElement> sugestoes = driver.findElements(By.cssSelector(".s-suggestion"));
+        assertTrue("Deveria não haver sugestões", sugestoes.isEmpty());
+        driver.quit();
+    }
+}

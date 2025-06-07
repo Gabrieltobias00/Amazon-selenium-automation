@@ -1,0 +1,17 @@
+package seleniumAmazonTestStart;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.safari.SafariDriver;
+
+public class amazonTest {
+	
+	public static void main(String[] args) {
+		
+		WebDriver driver = new SafariDriver ();
+		
+		driver.navigate().to("https://www.amazon.com");
+		
+		
+	}
+
+}

@@ -1,0 +1,18 @@
+package gettingStarted;
+
+import java.sql.Driver;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.safari.SafariDriver;
+
+
+public class amazonTest {
+	
+	public static void main(String[] args) {
+		
+		WebDriver webDriver = new SafariDriver ();	
+		
+		webDriver.navigate().to("https://www.amazon.com");
+	}
+
+}

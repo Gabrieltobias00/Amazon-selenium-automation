@@ -1,0 +1,57 @@
+package seleniumAmazonTestStart;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class amazonTest {
+	
+	public static void main(String[] args) {
+		
+		WebDriver driver = new SafariDriver ();
+		
+		driver.navigate().to("https://www.amazon.com");
+		
+		//driver.manage().window().fullscreen();
+		
+		System.out.println("The URL on my Browser: " + driver.getCurrentUrl());
+		
+		//Get Current Page Source and validation 
+		
+		var pageSource = driver.getPageSource ();
+		
+		if (pageSource.contains("twotabsearchtextbox")) {
+			
+			System.out.println("True");
+		} else {
+			System.out.println("False");
+		}
+		
+		// Click LogIn Link
+		
+		By lnklocator = By.linkText("Sign in");
+		WebElement element = driver.findElement(lnklocator);
+		element.click();
+		
+		// Input LogIn Information
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ap_email")));
+		emailField.sendKeys("gabrielbtobias@icloud.com");
+		
+		// Search Auto complete box
+		
+		//By autolocator = By.id("twotabsearchtextbox");
+		//WebElement searchelement = driver.findElement(autolocator);
+		//searchelement.sendKeys("gabrielbtobias@icloud.com");
+		
+		//driver.close();
+		
+	}
+
+}

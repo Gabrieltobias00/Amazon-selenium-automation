@@ -1,0 +1,46 @@
+package amazonTest;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.*;
+
+import java.time.Duration;
+import java.util.List;
+
+public class TesteNegativoPesquisa {
+    public static void main(String[] args) {
+        WebDriver driver = new SafariDriver();
+        driver.manage().window().maximize();
+        driver.get("https://www.amazon.com.br");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        try {
+            WebElement barraBusca = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("twotabsearchtextbox")));
+
+            // Input caracteres inválidos
+            barraBusca.sendKeys("!#");
+
+            // Espera para as sugestões carregarem, se houver
+            Thread.sleep(2000);
+
+            // Tenta encontrar sugestões
+            List<WebElement> sugestoes = driver.findElements(By.cssSelector(".s-suggestion"));
+
+            // Verifica se nenhuma sugestão foi encontrada
+            if (sugestoes.isEmpty()) {
+                System.out.println("Teste negativo OK: nenhuma sugestão foi exibida para caracteres inválidos.");
+            } else {
+                System.out.println("Teste negativo falhou: sugestões foram exibidas para caracteres inválidos:");
+                for (WebElement sugestao : sugestoes) {
+                    System.out.println("- " + sugestao.getText());
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro durante o teste: " + e.getMessage());
+        } finally {
+            driver.quit();
+        }
+    }
+}

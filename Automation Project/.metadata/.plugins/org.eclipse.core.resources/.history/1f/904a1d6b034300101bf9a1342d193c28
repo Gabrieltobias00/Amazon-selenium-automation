@@ -1,0 +1,48 @@
+package amazonTest;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.*;
+
+import java.time.Duration;
+import java.util.List;
+
+public class TesteMenuResponsivo {
+    public static void main(String[] args) {
+        WebDriver driver = new SafariDriver();
+        driver.manage().window().maximize();
+        driver.get("https://www.amazon.com.br");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        try {
+            // Espera pelo botão/menu "Todos"
+            WebElement menuTodos = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("searchDropdownBox")));
+
+            if (menuTodos.isDisplayed()) {
+                System.out.println("Menu 'Todos' está visível.");
+
+                // Clica para abrir as opções
+                menuTodos.click();
+
+                // Espera as opções ficarem visíveis
+                List<WebElement> opcoes = menuTodos.findElements(By.tagName("option"));
+                if (!opcoes.isEmpty()) {
+                    System.out.println("Opções encontradas no menu 'Todos':");
+                    for (WebElement opcao : opcoes) {
+                        System.out.println("- " + opcao.getText());
+                    }
+                } else {
+                    System.out.println("Nenhuma opção encontrada no menu 'Todos'.");
+                }
+            } else {
+                System.out.println("Menu 'Todos' não está visível.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro durante o teste do menu 'Todos': " + e.getMessage());
+        } finally {
+            driver.quit();
+        }
+    }
+}
